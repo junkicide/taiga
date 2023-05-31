@@ -49,19 +49,19 @@ pub(crate) fn poseidon_hash_n<const L: usize>(message: [pallas::Base; L]) -> pal
 
 pub fn poseidon_to_curve<const L: usize>(message: &[pallas::Base]) -> pallas::Point {
     let us = poseidon_to_field::<L>(message);
-    let q0 = hashtocurve::map_to_curve_simple_swu::<pallas::Base, pallas::Point, pallas::Iso>(
+    let q0 = hashtocurve::map_to_curve_simple_swu::<pallas::Base, pallas::Point, pallas::IsoEp>(
         &us[0],
         pallas::Point::THETA,
         pallas::Point::Z,
     );
-    let q1 = hashtocurve::map_to_curve_simple_swu::<pallas::Base, pallas::Point, pallas::Iso>(
+    let q1 = hashtocurve::map_to_curve_simple_swu::<pallas::Base, pallas::Point, pallas::IsoEp>(
         &us[1],
         pallas::Point::THETA,
         pallas::Point::Z,
     );
     let r = q0 + q1;
     debug_assert!(bool::from(r.is_on_curve()));
-    hashtocurve::iso_map::<pallas::Base, pallas::Point, pallas::Iso>(
+    hashtocurve::iso_map::<pallas::Base, pallas::Point, pallas::IsoEp>(
         &r,
         &pallas::Point::ISOGENY_CONSTANTS,
     )
